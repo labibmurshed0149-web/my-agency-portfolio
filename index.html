@@ -601,7 +601,8 @@
       if(!form) return;
       var statusEl = document.getElementById('contactStatus');
       var submitBtn = document.getElementById('cf-submit');
-      var apiBase = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:4000' : '';
+      var localApi = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:4000' : '';
+      var apiBase = window.AXIORA_API_URL || localApi;
 
       form.addEventListener('submit', function(ev){
         ev.preventDefault();
