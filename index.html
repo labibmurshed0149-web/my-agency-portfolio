@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXIORA LAB — Digital Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C;
+    --paper:#FFFFFF;
+    --paper-soft:#F4F4F2;
+    --mute:#6E6E72;
+    --line:#E4E4E1;
+    --accent:#2B2BFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+  a{color:inherit;text-decoration:none;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 40px;}
+  @media (max-width:720px){.wrap{padding:0 22px;}}
+
+  /* ===== NAV ===== */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:24px 40px;
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease;
+  }
+  nav.scrolled{border-bottom-color:var(--line);}
+  @media (max-width:720px){nav{padding:18px 22px;}}
+  .nav-mark{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:0.02em;}
+  .nav-links{display:flex;align-items:center;gap:36px;font-size:14px;color:var(--mute);}
+  .nav-links a{transition:color .2s;}
+  .nav-links a:hover{color:var(--ink);}
+  .nav-cta{
+    font-size:13px;font-weight:600;letter-spacing:0.02em;
+    padding:11px 20px;border:1px solid var(--ink);border-radius:999px;
+    transition:background .2s, color .2s;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{background:var(--ink);color:var(--paper);}
+  @media (max-width:860px){.nav-links a:not(.nav-cta){display:none;}}
+
+  /* ===== HERO ===== */
+  .hero{
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    padding:160px 24px 100px;
+    position:relative;
+  }
+  .hero-eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--mute);
+    margin-bottom:28px;
+    opacity:0;
+    animation:fadeUp .7s ease forwards;
+    animation-delay:.1s;
+  }
+  .wordmark{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:clamp(64px, 13vw, 188px);
+    line-height:0.9;
+    letter-spacing:-0.02em;
+    display:flex;justify-content:center;flex-wrap:wrap;
+  }
+  .wordmark.line2{
+    font-family:'Space Grotesk',sans-serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(34px, 6vw, 84px);
+    margin-top:2px;
+  }
+  .wordmark .ch{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(0.6em);
+    animation:letterIn .68s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .wordmark .sp{width:0.28em;}
+  @keyframes letterIn{
+    to{opacity:1;transform:translateY(0);}
+  }
+  .stat-row{
+    display:flex;gap:0;margin-top:56px;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    opacity:0;animation:fadeUp .7s ease forwards;animation-delay:1.45s;
+  }
+  .stat{
+    padding:18px 30px;border-left:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:flex-start;min-width:130px;
+  }
+  .stat:first-child{border-left:none;}
+  .stat b{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;}
+  .stat span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;}
+  @media (max-width:640px){.stat-row{flex-wrap:wrap;justify-content:center;}.stat{border-left:none;border-top:1px solid var(--line);}}
+
+  /* MARQUEE */
+  .marquee-wrap{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:34px 0;background:var(--ink);}
+  .marquee-track{display:flex;white-space:nowrap;animation:scroll 22s linear infinite;width:max-content;}
+  .marquee-track span{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:clamp(32px,6vw,64px);color:var(--paper);
+    padding:0 36px;display:flex;align-items:center;gap:36px;
+  }
+  .marquee-track span i{font-style:italic;font-weight:500;color:var(--accent);}
+  @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .hero-line{
+    width:0;height:1px;background:var(--ink);
+    margin:34px auto;
+    animation:drawLine .9s ease forwards;
+    animation-delay:1.05s;
+  }
+  @keyframes drawLine{to{width:64px;}}
+  .hero-sub{
+    max-width:560px;
+    font-size:17px;line-height:1.6;color:var(--mute);
+    opacity:0;animation:fadeUp .7s ease forwards;animation-delay:1.15s;
+  }
+  .hero-ctas{
+    display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;justify-content:center;
+    opacity:0;animation:fadeUp .7s ease forwards;animation-delay:1.3s;
+  }
+  .btn-primary{
+    background:var(--ink);color:var(--paper);
+    font-size:14px;font-weight:600;letter-spacing:0.02em;
+    padding:15px 28px;border-radius:999px;
+    transition:transform .25s ease, background .25s ease;
+    display:inline-block;
+  }
+  .btn-primary:hover{background:var(--accent);transform:translateY(-2px);}
+  .btn-ghost{
+    font-size:14px;font-weight:600;letter-spacing:0.02em;
+    padding:15px 28px;border-radius:999px;border:1px solid var(--line);
+    transition:border-color .25s ease, background .25s ease;
+    display:inline-block;
+  }
+  .btn-ghost:hover{border-color:var(--ink);background:var(--paper-soft);}
+
+  /* ===== SECTION SCAFFOLD ===== */
+  section{padding:130px 0;}
+  @media (max-width:720px){section{padding:88px 0;}}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:40px;margin-bottom:64px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:28px;
+  }
+  @media (max-width:720px){.section-head{flex-direction:column;align-items:flex-start;gap:16px;}}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--mute);margin-bottom:14px;
+  }
+  h2{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;
+    font-size:clamp(30px,4vw,46px);letter-spacing:-0.01em;line-height:1.08;
+    max-width:640px;
+  }
+  .section-note{font-size:14.5px;color:var(--mute);max-width:280px;line-height:1.6;}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ===== SERVICES ===== */
+  .service-groups{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  @media (max-width:860px){.service-groups{grid-template-columns:1fr;}}
+  .service-group{background:var(--paper);padding:44px 36px;}
+  .service-group h3{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;margin-bottom:22px;
+  }
+  .service-group ul{list-style:none;}
+  .service-group li{
+    font-size:15px;color:var(--mute);padding:11px 0;
+    border-top:1px solid var(--line);
+  }
+  .service-group li:first-of-type{border-top:none;}
+
+  /* ===== CAPABILITIES ===== */
+  .cap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  @media (max-width:720px){.cap-grid{grid-template-columns:1fr;}}
+  .cap-card{background:var(--paper);padding:48px 40px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between;transition:background .25s ease;position:relative;}
+  .cap-card:hover{background:var(--paper-soft);}
+  .cap-card .tag{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent);letter-spacing:0.06em;text-transform:uppercase;}
+  .cap-card h4{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600;margin:18px 0 12px;}
+  .cap-card p{font-size:14.5px;color:var(--mute);line-height:1.6;max-width:380px;}
+  .cap-arrow{
+    position:absolute;top:44px;right:36px;width:34px;height:34px;border-radius:50%;
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+    font-size:15px;transition:transform .25s ease, background .25s ease, color .25s ease;
+  }
+  .cap-card:hover .cap-arrow{transform:rotate(45deg);background:var(--ink);color:var(--paper);}
+  .cap-note{
+    margin-top:28px;font-size:13.5px;color:var(--mute);
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ===== APPROACH (flow) ===== */
+  .flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:8px;}
+  .flow-step{
+    flex:1;min-width:170px;padding:28px 22px;border-left:1px solid var(--line);
+    position:relative;
+  }
+  .flow-step:first-child{border-left:none;}
+  .flow-num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:16px;display:block;}
+  .flow-step h5{font-family:'Space Grotesk',sans-serif;font-size:16.5px;font-weight:600;margin-bottom:8px;}
+  .flow-step p{font-size:13.5px;color:var(--mute);line-height:1.55;}
+
+  /* ===== ABOUT ===== */
+  .about{background:var(--paper-soft);}
+  .about-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:60px;align-items:start;}
+  @media (max-width:860px){.about-grid{grid-template-columns:1fr;gap:36px;}}
+  .about-statement{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;
+    font-size:clamp(24px,3vw,34px);line-height:1.32;letter-spacing:-0.01em;
+  }
+  .about-body p{font-size:15px;color:var(--mute);line-height:1.75;margin-bottom:16px;}
+
+  /* ===== CTA / FOOTER ===== */
+  .cta-block{text-align:center;padding-top:60px;padding-bottom:60px;}
+  .cta-block h2{margin:0 auto 36px;text-align:center;max-width:680px;}
+  footer{border-top:1px solid var(--line);padding:60px 0 40px;}
+  .footer-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;margin-bottom:60px;}
+  .footer-col h6{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--mute);
+    text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;
+  }
+  .footer-col a, .footer-col div{font-size:15px;margin-bottom:8px;display:block;}
+  .footer-col a{transition:color .2s;}
+  .footer-col a:hover{color:var(--accent);}
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+    font-size:13px;color:var(--mute);border-top:1px solid var(--line);padding-top:28px;
+  }
+  .footer-wordmark{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;}
+
+  /* ===== PREMIUM LAYER: grain, cursor, loader ===== */
+  .grain{
+    position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.035;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .cursor-dot{
+    position:fixed;top:0;left:0;width:9px;height:9px;border-radius:50%;
+    background:var(--ink);pointer-events:none;z-index:9999;
+    transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;
+    mix-blend-mode:difference;
+  }
+  .cursor-dot.hover{width:46px;height:46px;background:var(--accent);}
+  @media (hover:none){.cursor-dot{display:none;}}
+
+  #loader{
+    position:fixed;inset:0;z-index:10000;background:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .9s cubic-bezier(.7,0,.2,1);
+  }
+  #loader.done{transform:translateY(-100%);}
+  #loader span{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--paper);
+    font-size:15px;letter-spacing:0.06em;
+    opacity:0;animation:loaderPulse 1.1s ease forwards;
+  }
+  @keyframes loaderPulse{0%{opacity:0;}50%{opacity:1;}100%{opacity:0;}}
+
+  .btn-primary, .btn-ghost{will-change:transform;}
+
+  .cap-card{overflow:hidden;}
+  .cap-card::before{
+    content:"";position:absolute;inset:0;z-index:0;
+    background:radial-gradient(circle at 30% 20%, rgba(43,43,255,0.10), transparent 60%);
+    opacity:0;transition:opacity .4s ease;
+  }
+  .cap-card:hover::before{opacity:1;}
+  .cap-card > *{position:relative;z-index:1;}
+</style>
+</head>
+<body>
+
+<div id="loader"><span>AXIORA LAB</span></div>
+<div class="grain"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<nav id="nav">
+  <div class="nav-mark">AXIORA LAB</div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#work">Work</a>
+    <a href="#approach">Approach</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-cta">Start a Project</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow">Creative Studio &nbsp;×&nbsp; Digital Agency &nbsp;×&nbsp; Technology Partner</div>
+  <h1 class="wordmark" id="wordmark" aria-label="AXIORA"></h1>
+  <h2 class="wordmark line2" id="wordmark2" aria-label="lab."></h2>
+  <div class="hero-line"></div>
+  <p class="hero-sub">Strategy, design, technology, content, and AI — treated as one connected system, not six separate vendors.</p>
+  <div class="hero-ctas">
+    <a href="#contact" class="btn-primary">Start a Project</a>
+    <a href="#work" class="btn-ghost">Explore Our Work</a>
+  </div>
+  <div class="stat-row">
+    <div class="stat"><b>Dhaka, BD</b><span>Based &amp; remote</span></div>
+    <div class="stat"><b>Strategy → AI</b><span>Full stack</span></div>
+    <div class="stat"><b>Zero</b><span>Fabricated results</span></div>
+  </div>
+</header>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>BUILD <i>what's next.</i> DESIGN <i>with intent.</i> CONNECT <i>with craft.</i> BUILD <i>what's next.</i> DESIGN <i>with intent.</i> CONNECT <i>with craft.</i></span>
+    <span>BUILD <i>what's next.</i> DESIGN <i>with intent.</i> CONNECT <i>with craft.</i> BUILD <i>what's next.</i> DESIGN <i>with intent.</i> CONNECT <i>with craft.</i></span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">What we do</div>
+        <h2>Ten disciplines. One direction.</h2>
+      </div>
+      <p class="section-note">Grouped by function, not offered à la carte — each part is built to work with the others.</p>
+    </div>
+
+    <div class="service-groups reveal">
+      <div class="service-group">
+        <h3>Design &amp; Brand</h3>
+        <ul>
+          <li>Brand strategy</li>
+          <li>UI/UX design</li>
+          <li>Creative direction</li>
+        </ul>
+      </div>
+      <div class="service-group">
+        <h3>Content &amp; Growth</h3>
+        <ul>
+          <li>Copywriting</li>
+          <li>Content strategy</li>
+          <li>Video editing</li>
+          <li>SEO</li>
+          <li>Advertising &amp; paid media</li>
+        </ul>
+      </div>
+      <div class="service-group">
+        <h3>Technology &amp; AI</h3>
+        <ul>
+          <li>Website design &amp; development</li>
+          <li>AI-powered creative &amp; digital services</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES / WORK -->
+<section id="work">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Selected work</div>
+        <h2>Capabilities, not filler case studies.</h2>
+      </div>
+      <p class="section-note">Our project archive is still being built out publicly. Here's what we build when we take one on.</p>
+    </div>
+
+    <div class="cap-grid reveal">
+      <div class="cap-card">
+        <div class="cap-arrow">↗</div>
+        <div>
+          <div class="tag">Web</div>
+          <h4>Websites &amp; digital experiences</h4>
+          <p>Designed around identity, usability, and performance — not templates with a new logo dropped in.</p>
+        </div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-arrow">↗</div>
+        <div>
+          <div class="tag">Brand</div>
+          <h4>Brand &amp; content systems</h4>
+          <p>Voice, visual identity, and content structure built to stay consistent as a business scales.</p>
+        </div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-arrow">↗</div>
+        <div>
+          <div class="tag">Growth</div>
+          <h4>SEO &amp; paid campaigns</h4>
+          <p>Visibility and acquisition work built to connect to the rest of the system, not run in isolation.</p>
+        </div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-arrow">↗</div>
+        <div>
+          <div class="tag">AI</div>
+          <h4>AI-assisted creative workflows</h4>
+          <p>AI used where it earns its place in the process — production speed and iteration, not a gimmick layer.</p>
+        </div>
+      </div>
+    </div>
+    <div class="cap-note reveal">// Real client work will populate this section as projects complete.</div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section id="approach" class="about" style="background:var(--paper);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">How we work</div>
+        <h2>One connected system, in order.</h2>
+      </div>
+      <p class="section-note">Each stage is built to hand off cleanly into the next — nothing works in isolation.</p>
+    </div>
+
+    <div class="flow reveal">
+      <div class="flow-step">
+        <span class="flow-num">01</span>
+        <h5>Strategy</h5>
+        <p>Define what the brand needs to say and who it needs to reach before anything gets designed.</p>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">02</span>
+        <h5>Design</h5>
+        <p>Build the visual and interface system the brand will run on.</p>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">03</span>
+        <h5>Content</h5>
+        <p>Write and produce what the design needs to communicate — copy, video, structure.</p>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">04</span>
+        <h5>Marketing</h5>
+        <p>Put the finished system in front of the right audience.</p>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">05</span>
+        <h5>AI &amp; tech</h5>
+        <p>Apply modern tooling to make the whole system faster and more capable, end to end.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <div class="eyebrow">About</div>
+      <p class="about-statement">Creative thinking meets modern technology.</p>
+    </div>
+    <div class="about-body reveal">
+      <p>AXIORA LAB is a digital agency built around the intersection of creativity, technology, strategy, and AI.</p>
+      <p>We combine design, development, content, marketing, advertising, and AI-powered capabilities into one cohesive process — built for businesses that want to stand out in an increasingly digital world.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section id="contact">
+  <div class="wrap cta-block reveal">
+    <div class="eyebrow" style="justify-content:center;display:flex;">Get started</div>
+    <h2>Have a project worth building properly?</h2>
+
+    <form id="contactForm" class="contact-form" style="max-width:760px;margin:28px auto 0;display:grid;gap:12px;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <input name="name" id="cf-name" placeholder="Your name" required style="flex:1;padding:14px;border:1px solid var(--line);border-radius:8px;font-size:15px;" />
+        <input name="email" id="cf-email" type="email" placeholder="Email address" required style="width:260px;padding:14px;border:1px solid var(--line);border-radius:8px;font-size:15px;" />
+      </div>
+      <textarea name="message" id="cf-message" placeholder="Tell us about your project" required style="min-height:140px;padding:14px;border:1px solid var(--line);border-radius:8px;font-size:15px;"></textarea>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <button class="btn-primary" id="cf-submit" type="submit"><span>Send Request</span></button>
+        <div id="contactStatus" class="mono" style="color:var(--mute);font-size:13px;"></div>
+      </div>
+    </form>
+
+    <div style="text-align:center;margin-top:18px;">
+      <a href="https://www.instagram.com/axiora_lab" class="btn-ghost" target="_blank" rel="noopener">Let's Work Together</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h6>Contact</h6>
+        <a href="tel:+8801321590893">+880 1321-590893</a>
+        <a href="tel:+8801776200149">+880 1776200149</a>
+      </div>
+      <div class="footer-col">
+        <h6>Team</h6>
+        <div>Labib Murshed</div>
+        <div>Farhan Nisher</div>
+      </div>
+      <div class="footer-col">
+        <h6>Social</h6>
+        <a href="https://www.instagram.com/axiora_lab" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-wordmark">AXIORA LAB</div>
+      <div>© 2026 AXIORA LAB. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Wordmark stagger build
+  (function(){
+    function buildLine(id, text, startDelay, step){
+      var el = document.getElementById(id);
+      var i = 0;
+      text.split('').forEach(function(ch){
+        var span = document.createElement('span');
+        span.className = 'ch' + (ch === ' ' ? ' sp' : '');
+        span.textContent = ch === ' ' ? '\u00A0' : ch;
+        span.style.animationDelay = (startDelay + i * step) + 's';
+        el.appendChild(span);
+        if(ch !== ' ') i++;
+      });
+    }
+    buildLine('wordmark', 'AXIORA', 0.28, 0.045);
+    buildLine('wordmark2', 'lab.', 0.62, 0.05);
+  })();
+
+  // Nav border on scroll
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 8);
+  });
+
+  // Scroll reveal
+  var revealEls = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.12});
+  revealEls.forEach(function(el){ io.observe(el); });
+
+  // Intro loader wipe
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      document.getElementById('loader').classList.add('done');
+    }, 550);
+  });
+
+  // Custom cursor + magnetic buttons
+  (function(){
+    if(window.matchMedia('(hover: none)').matches) return;
+    var dot = document.getElementById('cursorDot');
+    window.addEventListener('mousemove', function(e){
+      dot.style.left = e.clientX + 'px';
+      dot.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, .cap-card').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ dot.classList.add('hover'); });
+      el.addEventListener('mouseleave', function(){ dot.classList.remove('hover'); });
+    });
+    document.querySelectorAll('.btn-primary, .btn-ghost').forEach(function(btn){
+      btn.addEventListener('mousemove', function(e){
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width/2;
+        var y = e.clientY - r.top - r.height/2;
+        btn.style.transform = 'translate(' + (x*0.25) + 'px,' + (y*0.35) + 'px)';
+      });
+      btn.addEventListener('mouseleave', function(){ btn.style.transform = 'translate(0,0)'; });
+    });
+  })();
+
+    // Contact form submission
+    (function(){
+      var form = document.getElementById('contactForm');
+      if(!form) return;
+      var statusEl = document.getElementById('contactStatus');
+      var submitBtn = document.getElementById('cf-submit');
+      var apiBase = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:4000' : '';
+
+      form.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        statusEl.textContent = '';
+        submitBtn.setAttribute('disabled','disabled');
+        submitBtn.style.opacity = '0.7';
+
+        var payload = {
+          name: document.getElementById('cf-name').value.trim(),
+          email: document.getElementById('cf-email').value.trim(),
+          message: document.getElementById('cf-message').value.trim()
+        };
+
+        fetch(apiBase + '/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(function(res){
+          if(!res.ok) throw new Error('Network error');
+          return res.json();
+        }).then(function(json){
+          form.reset();
+          if(json && json.emailSent === false){
+            statusEl.style.color = 'crimson';
+            statusEl.textContent = 'Saved but email failed: ' + (json.error || 'unknown');
+          }else{
+            statusEl.style.color = 'green';
+            statusEl.textContent = 'Thanks — we received your message.';
+          }
+        }).catch(function(err){
+          console.error(err);
+          statusEl.style.color = 'crimson';
+          statusEl.textContent = 'Unable to send. Try again later. See console for details.';
+        }).finally(function(){
+          submitBtn.removeAttribute('disabled');
+          submitBtn.style.opacity = '';
+        });
+      });
+    })();
+</script>
+
+</body>
+</html>
